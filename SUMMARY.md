@@ -2,13 +2,13 @@
 
 * [Page](README.md)
 
-## 📶 Statistical Signal Processing
-
-* [Introduction](statistical-signal-processing/introduction.md)
-
 ## ➕ Mathematical Statistics
 
 * [Moment-Generating Functions](mathematical-statistics/moment-generating-functions.md)
+
+## 📶 Statistical Signal Processing
+
+* [Introduction](statistical-signal-processing/introduction.md)
 
 ## PRML
 
