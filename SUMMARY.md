@@ -16,4 +16,4 @@
 
 ## Project Management
 
-* [Stakeholder](project-management/stakeholder.md)
+* [SMART 목표](project-management/smart.md)
