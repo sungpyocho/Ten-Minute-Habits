@@ -1,10 +1,11 @@
 # Table of contents
 
-* [Page](README.md)
+* [👋 Welcome](README.md)
 
 ## ➕ Mathematical Statistics
 
 * [Moment-Generating Functions](mathematical-statistics/moment-generating-functions.md)
+* [Expected Value](mathematical-statistics/expected-value.md)
 
 ## 📶 Statistical Signal Processing
 
