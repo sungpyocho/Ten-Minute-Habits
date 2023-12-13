@@ -16,10 +16,10 @@
 
 * [Introduction](statistical-signal-processing/introduction.md)
 
-## PRML
-
-* [Page 1](prml/page-1.md)
-
 ## Project Management
 
 * [SMART 목표](project-management/smart.md)
+
+## 📓 Journal
+
+* [Page 1](journal/page-1.md)
