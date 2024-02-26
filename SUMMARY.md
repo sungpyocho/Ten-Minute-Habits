@@ -16,7 +16,7 @@
 
 * [Introduction](statistical-signal-processing/introduction.md)
 
-## 🛤 Tracking
+## 🛤️ Tracking
 
 * [Particle Filter](tracking/particle-filter.md)
 * [Bayesian Filter](tracking/bayesian-filter.md)
