@@ -15,6 +15,8 @@
 ## 📶 Statistical Signal Processing
 
 * [Introduction](statistical-signal-processing/introduction.md)
+* [Pulse Compression](statistical-signal-processing/pulse-compression.md)
+* [Instantaneous phase and frequency](statistical-signal-processing/instantaneous-phase-and-frequency.md)
 
 ## 🛤️ Tracking
 
