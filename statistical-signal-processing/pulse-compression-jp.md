@@ -60,7 +60,7 @@ $$
 例えば、 $$f_c = 20.0kHz, \Delta f=4kHz$$、つまり開始時の周波数が f(0)=18kHz 、終了時の周波数が f(T)=22kHz の線形チャープ信号をPythonで実装してみよう。サンプルの長さは512に設定すると仮定する。
 
 ```python
-num_of_samples = 1024
+num_of_samples = 512
 fs = 20000 * 8
 t = np.linspace(0, num_of_samples/fs, num_of_samples)
 f0 = 18000
@@ -215,7 +215,7 @@ corr_env_normalized = corr_env / np.max(corr_env)
 max_val = np.max(corr_env)
 ```
 
-<figure><img src="../.gitbook/assets/chirp_normalized_fmcw.png" alt=""><figcaption><p>Normalized cross-correlation envelope.PCR is 13.47</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/chirp_normalized_fmcw.png" alt=""><figcaption><p>Normalized cross-correlation envelope.PCR is 10.67</p></figcaption></figure>
 
 自己相関関数の  $$sinc(x)$$関数にはサイドローブが存在するが、これを除去するためにはHanningやHannなどのウィンドウを使用することができる。ウィンドウ関数を適用すると振幅の最大値は少し低くなるが、サイドローブのない信号を得ることができる。
 

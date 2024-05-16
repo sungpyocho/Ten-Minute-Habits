@@ -19,7 +19,7 @@
 * 신호의 에너지가 충분히 보존되도록, 신호를 긴 시간동안 송신
 * 매치 필터(matched filtering) 후에, 상관 신호의 길이가 일반적인 CW 사인파의 신호 길이보다 작도록 신호를 설계
 
-자동차의 ADAS 센서, 특히 레이다와 초음파에서는 펄스 압축을 위해 주로 선형 챠프(linear chirp, 주파수가 시간에 따라 일정하게 변조되는 신호)가 사용된다. 먼저 송신 신호의 길이가 T라고 하자. t=0에서 시작하고 t=T에서 끝나는 이 신호의 주파수가 캐리어 주파수 $$f_c$$를 중심으로 $$\Delta f$$만큼 선형적으로 변화한다면, 신호 $$s_c(t)$$의 식은 다음과 같이 쓸 수 있다.
+자동차의 ADAS 센서, 특히 레이더와 초음파에서는 펄스 압축을 위해 주로 선형 챠프(linear chirp, 주파수가 시간에 따라 일정하게 변조되는 신호)가 사용된다. 먼저 송신 신호의 길이가 T라고 하자. t=0에서 시작하고 t=T에서 끝나는 이 신호의 주파수가 캐리어 주파수 $$f_c$$를 중심으로 $$\Delta f$$만큼 선형적으로 변화한다면, 신호 $$s_c(t)$$의 식은 다음과 같이 쓸 수 있다.
 
 $$
 s_c(t) = \left\{ \begin{array}{ll} e^{i 2 \pi \left( \left( f_c \,-\, \frac{\Delta f}{2}\right) t \, + \, \frac{\Delta f}{2T}t^2 \, \right)} &\mbox{if} \; 0 \leq t < T \\ 0 &\mbox{otherwise}\end{array}\right.
@@ -57,14 +57,14 @@ $$
 
 주파수가 어떻게 변하는지 보려면, 신호의 처음과 마지막의 주파수를 확인하면 된다. 신호는 t=0에 시작해 t=T에 끝나므로, 주파수는 $$f(0) = f_c - \Delta f/ 2$$ 부터 $$f(T) = f_c + \Delta f/ 2$$까지 변화한다는 것을 알 수 있다.
 
-예를 들어, $$f_c = 54.5kHz, \Delta f=7kHz$$, 즉 시작할 때 주파수가 f(0)=51kHz, 끝날 때 주파수가 f(T)=58kHz인 선형 챠프 신호를 파이썬으로 구현해보자. 샘플의 길이는 1024로 설정한다고 가정한다.
+예를 들어, $$f_c = 20kHz, \Delta f=4kHz$$, 즉 시작할 때 주파수가 f(0)=18kHz, 끝날 때 주파수가 f(T)=22kHz인 선형 챠프 신호를 파이썬으로 구현해보자. 샘플의 길이는 512로 설정한다고 가정한다.
 
 ```python
-num_of_samples = 1024
-fs = 54500 * 8
+num_of_samples = 512
+fs = 22000 * 8
 t = np.linspace(0, num_of_samples/fs, num_of_samples)
-f0 = 51000
-f1 = 58000
+f0 = 18000
+f1 = 22000
 
 # generate chirp signal
 f_of_t = f0 + (f1 - f0) * t / (num_of_samples/fs)
@@ -76,9 +76,9 @@ s_chirp = 0.5 * np.sin(phi_of_t)
 
 만든 이 신호를 시간 영역과, 주파수 영역에서 나타내보자.
 
-<figure><img src="broken-reference" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/chirp_time_domain_20.png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="broken-reference" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/chirp_freq_response_20.png" alt=""><figcaption></figcaption></figure>
 
 송신 신호 $$s_c(t)$$를 어떻게 표현할지는 알았으니, 이제는 수신 신호 $$r(t)$$를 표현해 보자. 센서의 신호는 물체에 반사되면서, 온도 및 습도 등의 다양한 영향을 받아 그 진폭이 변해 센서의 마이크로 다시 돌아오게 된다. 그렇다면 수신 신호는 송신 신호가 반사된 시간만큼 느려지고, 진폭이 변한 신호로 표현할 수 있을 것이다. 그러나 이게 끝이 아니다. 노이즈가 추가된다. 이 노이즈는 $$[f_c -\Delta f/2,f_c +\Delta f/2 ]$$ 영역에서 일정한 에너지(정확히는 power spectral density)를 갖고,  다른 영역에서는 0의 에너지를 가진다. 이를 식으로 표현해 보자.
 
@@ -143,9 +143,9 @@ cross_corr = signal.correlate(s_chirp_a, s_chirp, mode='full')
 time_ms = np.arange(-len(s_chirp)+1, len(s_chirp)) * 1000 / fs
 ```
 
-<figure><img src="../.gitbook/assets/autocorrelation.png" alt=""><figcaption><p>Autocorrelation of the chirp signal.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/chirp_autocorrelation.png" alt=""><figcaption><p>Autocorrelation of the chirp signal.</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/envelope_of_cross_correlation.png" alt=""><figcaption><p>Envelope of Autocorrelation(=cross-correlation between chip and analytic signal). <br>the absolute value of the result represents the envelope.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/chrip_autocorrealtion_envelope.png" alt=""><figcaption><p>Envelope of Autocorrelation(=cross-correlation between chip and analytic signal). <br>the absolute value of the result represents the envelope.</p></figcaption></figure>
 
 #### 상관 이후의 신호 넓이
 
@@ -157,7 +157,11 @@ time_ms = np.arange(-len(s_chirp)+1, len(s_chirp)) * 1000 / fs
 
 > 결과 2: 대역 $$\Delta f$$의 선형 주파수 변조 신호의 거리 해상도는 $$c \over {2 \Delta f}$$이다.
 >
-> 여기서 c는 파형의 속도를 의미한다. 초음파 센서라면 c는 음속이 될 것이다.
+> 여기서 c는 파형의 속도를 의미한다. 레이더라면 c는 광속, 초음파 센서라면 c는 음속이 될 것이다.
+
+거리 해상도는$${c \over {2 \Delta f}} = {cT' \over 2 }$$로도 나타낼 수 있다. 여기서 CW신호의 거리 해상도가 $$cT \over 2$$였다는 것을 떠올려 보자. 결국 CW신호의 거리 해상도와, 선형 주파수 변조 신호(챠프 신호)의 거리 해상도 식은 달라 보여도 사실은 같은 것이었다. 즉, 긴 챠프 신호를 매치 필터에 통과시켜 얻은 상관신호의 너비 $$T'$$가 CW신호의 너비 $$T$$보다 짧도록 설계하는 것이 펄스 압축의 핵심이다.
+
+한편 펄스 압축이 얼마나 잘 이루어졌는지를 평가하는 지표도 있다.
 
 > 펄스 압축률(Pulse Compression Ratio)이란?
 >
@@ -211,7 +215,7 @@ corr_env_normalized = corr_env / np.max(corr_env)
 max_val = np.max(corr_env)
 ```
 
-<figure><img src="../.gitbook/assets/pcr.png" alt=""><figcaption><p>Normalized cross-correlation envelope.PCR is 13.47</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/chirp_normalized_fmcw.png" alt=""><figcaption><p>Normalized cross-correlation envelope.PCR is 10.67</p></figcaption></figure>
 
 자기상관 함수의  $$sinc(x)$$함수는 사이드로브가 존재하는데, 이를 없에기 위해서는 Hanning, Hann 등의 윈도우를 사용할 수 있다. 윈도우 함수를 적용하면 진폭의 최대치가 조금 낮아지지만 사이드로브는 없는 신호를 얻을 수 있다.
 
