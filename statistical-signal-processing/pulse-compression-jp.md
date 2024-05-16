@@ -33,7 +33,7 @@ $$
 
 $$f(t) = f_c - \Delta f/2  + (\Delta f/T)t$$
 
-순瞬間周波数を時間に対して積分すれば、次のように位相も求めることができる。
+瞬間周波数を時間に対して積分すれば、次のように位相も求めることができる。
 
 $$\phi(t) = 2\pi\int_0^t f(t')dt' = 2\pi\int_0^t (f_c - \Delta f/2  + (\Delta f/T)t')dt' = 2\pi(f_c - \Delta f/2  + (\Delta f/{2T})t)t$$
 
