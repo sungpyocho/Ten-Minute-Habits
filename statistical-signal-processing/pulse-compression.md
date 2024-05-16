@@ -76,9 +76,9 @@ s_chirp = 0.5 * np.sin(phi_of_t)
 
 만든 이 신호를 시간 영역과, 주파수 영역에서 나타내보자.
 
-<figure><img src="../.gitbook/assets/chirp_time_domain.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="broken-reference" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/chirp_freq_response.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="broken-reference" alt=""><figcaption></figcaption></figure>
 
 송신 신호 $$s_c(t)$$를 어떻게 표현할지는 알았으니, 이제는 수신 신호 $$r(t)$$를 표현해 보자. 센서의 신호는 물체에 반사되면서, 온도 및 습도 등의 다양한 영향을 받아 그 진폭이 변해 센서의 마이크로 다시 돌아오게 된다. 그렇다면 수신 신호는 송신 신호가 반사된 시간만큼 느려지고, 진폭이 변한 신호로 표현할 수 있을 것이다. 그러나 이게 끝이 아니다. 노이즈가 추가된다. 이 노이즈는 $$[f_c -\Delta f/2,f_c +\Delta f/2 ]$$ 영역에서 일정한 에너지(정확히는 power spectral density)를 갖고,  다른 영역에서는 0의 에너지를 가진다. 이를 식으로 표현해 보자.
 

@@ -19,7 +19,7 @@
 * 信号のエネルギーが十分に保存されるように、信号を長時間送信する
 * マッチドフィルタ（matched filtering）後に、相関信号の長さが一般的なCWサイン波の信号の長さよりも短くなるように信号を設計する
 
-自動車のADASセンサー、特にレーダーや超音波ではパルス圧縮のために主に線形チャープ（linear chirp、周波数が時間に応じて一定に変調される信号）が使用される。まず送信信号の長さをTとしよう。t=0から始まり、t=Tで終わるこの信号の周波数がキャリア周波数 $$f_c$$を中心に $$\Delta f$$だけ線形的に変化する場合、信号$$s_c(t)$$の式は次のように表せる。
+自動車のADASセンサー、特にレーダーではパルス圧縮のために主に線形チャープ（linear chirp、周波数が時間に応じて一定に変調される信号）が使用される。まず送信信号の長さをTとしよう。t=0から始まり、t=Tで終わるこの信号の周波数がキャリア周波数 $$f_c$$を中心に $$\Delta f$$だけ線形的に変化する場合、信号$$s_c(t)$$の式は次のように表せる。
 
 $$
 s_c(t) = \left\{ \begin{array}{ll} e^{i 2 \pi \left( \left( f_c \,-\, \frac{\Delta f}{2}\right) t \, + \, \frac{\Delta f}{2T}t^2 \, \right)} &\mbox{if} \; 0 \leq t < T \\ 0 &\mbox{otherwise}\end{array}\right.
@@ -57,14 +57,14 @@ $$
 
 周波数がどのように変化するかを見るためには、信号の最初と最後の周波数を確認すればよい。信号は t=0 から始まり、 t=T で終わるので、周波数は $$f(0) = f_c - \Delta f/ 2$$ から $$f(T) = f_c + \Delta f/ 2$$まで変化することがわかる。
 
-例えば、 $$f_c = 54.5kHz, \Delta f=7kHz$$、つまり開始時の周波数が f(0)=51kHz 、終了時の周波数が f(T)=58kHz の線形チャープ信号をPythonで実装してみよう。サンプルの長さは1024に設定すると仮定する。
+例えば、 $$f_c = 20.0kHz, \Delta f=4kHz$$、つまり開始時の周波数が f(0)=18kHz 、終了時の周波数が f(T)=22kHz の線形チャープ信号をPythonで実装してみよう。サンプルの長さは512に設定すると仮定する。
 
 ```python
 num_of_samples = 1024
-fs = 54500 * 8
+fs = 20000 * 8
 t = np.linspace(0, num_of_samples/fs, num_of_samples)
-f0 = 51000
-f1 = 58000
+f0 = 18000
+f1 = 22000
 
 # generate chirp signal
 f_of_t = f0 + (f1 - f0) * t / (num_of_samples/fs)
@@ -76,9 +76,9 @@ s_chirp = 0.5 * np.sin(phi_of_t)
 
 作成したこの信号を時間領域と周波数領域で表してみよう。
 
-<figure><img src="../.gitbook/assets/chirp_time_domain.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/chirp_time_domain_20.png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/chirp_freq_response.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/chirp_freq_response_20.png" alt=""><figcaption></figcaption></figure>
 
 送信信号 $$s_c(t)$$をどのように表現するかは分かったので、次に受信信号 $$r(t)$$を表現してみよう。センサーの信号は物体に反射され、温度や湿度などの様々な影響を受け、その振幅が変化してセンサーのマイクに戻ってくる。したがって、受信信号は送信信号が反射された時間だけ遅れ、振幅が変化した信号として表現できるだろう。しかし、これで終わりではない。ノイズが追加される。このノイズは $$[f_c -\Delta f/2,f_c +\Delta f/2 ]$$ 領域では一定のエネルギー（正確にはパワースペクトル密度）を持ち、他の領域では0のエネルギーを持つ。これを式で表してみよう。
 
@@ -143,9 +143,9 @@ cross_corr = signal.correlate(s_chirp_a, s_chirp, mode='full')
 time_ms = np.arange(-len(s_chirp)+1, len(s_chirp)) * 1000 / fs
 ```
 
-<figure><img src="../.gitbook/assets/autocorrelation.png" alt=""><figcaption><p>Autocorrelation of the chirp signal.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/chirp_autocorrelation.png" alt=""><figcaption><p>Autocorrelation of the chirp signal.</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/envelope_of_cross_correlation.png" alt=""><figcaption><p>Envelope of Autocorrelation(=cross-correlation between chip and analytic signal). <br>the absolute value of the result represents the envelope.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/chrip_autocorrealtion_envelope.png" alt=""><figcaption><p>Envelope of Autocorrelation(=cross-correlation between chip and analytic signal). <br>the absolute value of the result represents the envelope.</p></figcaption></figure>
 
 #### 相関後の信号の幅
 
@@ -157,7 +157,11 @@ time_ms = np.arange(-len(s_chirp)+1, len(s_chirp)) * 1000 / fs
 
 > 結果2: 帯域 $$\Delta f$$の線形周波数変調信号の距離分解能は $$c \over {2 \Delta f}$$
 >
-> ここで、 cは波形の速度を意味する。超音波センサーの場合、 cは音速となる。
+> ここで、 cは波形の速度を意味する。レーダの場合、cは光速である。
+
+距離分解能は、$${c \over {2 \Delta f}} = {cT' \over 2 }$$でも表せる。CW信号の距離分解能が $$cT \over 2$$だったことを思い出してほしい。結局CW信号の距離分解能と、線形周波数変調信号の距離分解能は違く見えても同じものだったことがわかる。パルス圧縮の効果を得るためには、長いチャープ信号をマッチングフィルターで通して得た相関信号の幅$$T'$$がCW信号の幅$$T$$より短くなるように設計する必要がある。
+
+一方、パルス圧縮がどれだけ上手くできたか？を評価するための指標もある。
 
 > パルス圧縮率（Pulse Compression Ratio）とは？
 >
@@ -211,7 +215,7 @@ corr_env_normalized = corr_env / np.max(corr_env)
 max_val = np.max(corr_env)
 ```
 
-<figure><img src="../.gitbook/assets/pcr.png" alt=""><figcaption><p>Normalized cross-correlation envelope.PCR is 13.47</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/chirp_normalized_fmcw.png" alt=""><figcaption><p>Normalized cross-correlation envelope.PCR is 13.47</p></figcaption></figure>
 
 自己相関関数の  $$sinc(x)$$関数にはサイドローブが存在するが、これを除去するためにはHanningやHannなどのウィンドウを使用することができる。ウィンドウ関数を適用すると振幅の最大値は少し低くなるが、サイドローブのない信号を得ることができる。
 
